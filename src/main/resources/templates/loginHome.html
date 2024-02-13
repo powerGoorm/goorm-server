@@ -30,6 +30,22 @@
                 </button>
             </form>
         </div>
+        <div class="col">
+            <form th:action="@{/update}" method="post">
+                <button class="w-100 btn btn-dark btn-lg"  type="submit">
+                    <!--onclick="location.href='update.html'"-->
+                    회원정보수정
+                </button>
+            </form>
+        </div>
+        <div class="col">
+            <form th:action="@{/mail}" method="get">
+                <button class="w-100 btn btn-dark btn-lg"  type="submit">
+                    <!--onclick="location.href='update.html'"-->
+                    비밀번호 바꾸기.
+                </button>
+            </form>
+        </div>
     </div>
 
     <hr class="my-4">

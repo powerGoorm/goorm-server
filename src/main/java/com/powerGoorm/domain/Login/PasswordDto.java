@@ -1,14 +1,13 @@
-package com.powerGoorm.Login;
+package com.powerGoorm.domain.Login;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
+
 @Data
-public class Login {
+public class PasswordDto {
 
 
-    @NotNull
-    private String id;
     @NotNull
     private String password;
 }

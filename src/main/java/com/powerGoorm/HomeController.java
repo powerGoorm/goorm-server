@@ -1,8 +1,8 @@
 package com.powerGoorm;
 
 
+import com.powerGoorm.Web.argumentresolver.LoginCheck;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -14,15 +14,17 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class HomeController {
 
     @GetMapping("/")
-    public String home(HttpServletRequest req){
-        HttpSession session=req.getSession(false);
-        if(session!=null){
+    public String home(@LoginCheck String id, HttpServletRequest req){
 
-            return "loginHome";
-        }
+        if(id==null){
 
-        return "home";
+        return "home";}
+
+
+        return  "loginHome";
     }
+
+
 
 
 
