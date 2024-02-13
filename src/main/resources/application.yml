@@ -14,8 +14,25 @@ spring:
           connectiontimeout: 5000
           timeout: 5000
           writetimeout: 5000
-    auth-code-expiration-millis: 1800000  # 30 * 60 * 1000 == 30?
-  #datasource:
+    auth-code-expiration-millis: 1800000
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://mydatabase.cfw2ecc8mwzk.ap-northeast-2.rds.amazonaws.com:3306/
+    username: admin
+    password: password
+  server:
+    port: 8080
+    servlet:
+      context-path: /
+      encoding:
+        charset: UTF-8
+        enabled: true
+        force: true
+
+
+
+
+    #datasource:
     #url: jdbc:mysql://localhost:3306/testdb
     #username: root
     #password: 1234
