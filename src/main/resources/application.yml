@@ -17,7 +17,7 @@ spring:
     auth-code-expiration-millis: 1800000
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://mydatabase.cfw2ecc8mwzk.ap-northeast-2.rds.amazonaws.com:3306/
+    url: jdbc:mysql://mydatabase.cfw2ecc8mwzk.ap-northeast-2.rds.amazonaws.com:3306/goorm
     username: admin
     password: password
   server:
