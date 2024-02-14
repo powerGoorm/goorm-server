@@ -1,0 +1,3 @@
+### 멤버페이지
+GET localhost:8080/member
+Content-Type: application/json
