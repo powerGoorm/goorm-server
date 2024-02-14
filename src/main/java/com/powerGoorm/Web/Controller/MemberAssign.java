@@ -47,18 +47,6 @@ public class MemberAssign {
 
         member.setCreate_at(now.toString());
         memberService.SaveData(member);
-        /*try{
-
-            MemberRepository memberRepository;
-            MemberService memberService;
-            log.info("memberservice check {}",memberService.hashCode());
-            memberService.savedata(member);
-            memberService.logic1_findinguser("dong3058");
-
-
-        }catch(SQLException e){
-            throw e;
-        }*/
 
        return  "redirect:/";
     }

@@ -28,10 +28,10 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addInterceptor(new EmailcheckInterCeptor())
                 .order(2)
                 .addPathPatterns("/mail2");
-                //.excludePathPatterns("/","/members/add","/login","/mail");
+
         registry.addInterceptor(new EmailcheckInterCeptor2())
                 .order(3)
                 .addPathPatterns("/passwords");
-                //.excludePathPatterns("/","/members/add","/login","/mail","/mail2");
+
     }
 }

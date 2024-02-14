@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.Optional;
+import java.util.Random;
 
 @Slf4j
 @Controller
@@ -70,7 +71,7 @@ public class LoginForm {
     @PostMapping("/logout")
     public String LogOut(HttpServletRequest req){
         HttpSession session=req.getSession(false);
-        //log.info("session check:{}",session);
+
         if(session!=null){
             session.invalidate();
 
@@ -120,11 +121,18 @@ public class LoginForm {
             return "members/mail";
         }
 
+        Random r=new Random();
+        char [] sendCode=new char[10];
+        for(int i=0;i<10;i++){
 
-        emailService.SendMail(emails.getEmail(),"인증요청","helloworld");
+
+            sendCode[i]=Character.forDigit(r.nextInt(100),10);;
+        }
+        String sendCodes=String.valueOf(sendCode);
+        emailService.SendMail(emails.getEmail(),"인증요청",sendCodes);
 
         HttpSession session=req.getSession(false);
-        session.setAttribute("answer_code","helloworld");
+        session.setAttribute("answer_code",sendCodes);
 
         return "redirect:/mail2";
     }

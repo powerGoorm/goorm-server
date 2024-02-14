@@ -11,7 +11,7 @@ public class EmailcheckInterCeptor implements HandlerInterceptor{
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         HttpSession session=request.getSession(false);
-        log.info("이메일 체크1");
+
         if(session.getAttribute("answer_code")==null){
 
             response.sendRedirect("/mail?redirectURL="+request.getRequestURI());
