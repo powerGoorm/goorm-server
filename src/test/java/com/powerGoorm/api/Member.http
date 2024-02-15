@@ -1,3 +1,7 @@
 ### 멤버페이지
 GET localhost:8080/member
 Content-Type: application/json
+
+###멤버 이름 검색
+GET localhost:8080/member/search?name=권지환
+Content-Type: application/json
