@@ -1,26 +1,41 @@
 package com.powerGoorm.Web.Controller;
 
 
+import com.powerGoorm.Web.service.EmailService;
+import com.powerGoorm.domain.Data;
 import com.powerGoorm.domain.Email.CheckUserInput;
 import com.powerGoorm.domain.Email.Emails;
-import com.powerGoorm.Web.service.EmailService;
+import com.powerGoorm.domain.Exception.Errors.CodeMistMatch.CodeMisMatch;
+import com.powerGoorm.domain.Exception.Errors.CodeMistMatch.MailCodeMisMatchError;
+import com.powerGoorm.domain.Exception.Errors.NoIdError.NotFoundIdError;
+import com.powerGoorm.domain.Exception.Errors.NotCollectFormerror.BingdingErrorsList;
+import com.powerGoorm.domain.Exception.Errors.NotCollectFormerror.NotCollectFormError;
+import com.powerGoorm.domain.Exception.Errors.UnCorrectPassworderror.NotPassword;
+import com.powerGoorm.domain.Exception.Errors.UnCorrectPassworderror.UnCorrectPasswordError;
+import com.powerGoorm.domain.Exception.Errors.idexisterror.NoId;
 import com.powerGoorm.domain.Login.Login;
+import com.powerGoorm.domain.Login.PasswordDto;
+import com.powerGoorm.domain.Status;
+import com.powerGoorm.domain.Sucess.MakeSucessResponseWithoutData;
+import com.powerGoorm.domain.Sucess.SucessResp;
 import com.powerGoorm.member.MemberDto;
 import com.powerGoorm.member.Member;
-import com.powerGoorm.domain.Login.PasswordDto;
 import com.powerGoorm.Web.repositroy.JpaMemeberRepository;
 import com.powerGoorm.Web.service.LoginMemberService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Null;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.codec.CodecException;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.Optional;
 import java.util.Random;
@@ -35,98 +50,85 @@ public class LoginForm {
     private final LoginMemberService memberService;
 
     private final JpaMemeberRepository jpaMemeberRepository;
-    @GetMapping("/login")
-    public String GetLoginPage(@ModelAttribute Login login){
-
-        return "login/loginForm";
-    }
 
     @PostMapping("/login")
-    public String PostLoginPage(@Validated @ModelAttribute Login login, BindingResult bindingResult, HttpServletRequest req) {
+    @ResponseBody
+    public ResponseEntity<SucessResp<Null>> PostLoginPage(@Valid @ModelAttribute Login login, BindingResult bindingResult, HttpServletRequest req) {
 
-
-        String id=login.getId();
-
-        Optional<Member> member=memberService.FindByUserId(id);
-
-        if (member==null){
-            bindingResult.reject("존재하지않는 아이디입니다.");
-        } else if (memberService.CheckPassword(id, login.getPassword())) {
-            return "/login/loginForm";
-        }
 
         if(bindingResult.hasErrors()){
+            throw new NotCollectFormError("입력형식 오류발생",HttpStatus.BAD_REQUEST,new BingdingErrorsList(bindingResult.getFieldErrors()));
+        }
+        String id=login.getId();
+        Optional<Member> member=memberService.FindByUserId(id);
 
-            return "/login/loginForm";
+        if (member.isEmpty()){
 
+            throw new NotFoundIdError("can't found id", HttpStatus.BAD_REQUEST,new NoId());
+        }
+
+
+        else if(memberService.CheckPassword(id, login.getPassword())) {
+
+            throw new UnCorrectPasswordError("un correct password",HttpStatus.BAD_REQUEST,new NotPassword());
         }
 
         HttpSession session=req.getSession();
         session.setAttribute("id",id);
-        log.info("login 완료");
-        return "redirect:/";
+        MakeSucessResponseWithoutData<Null> makeSucessResponseWithoutData=new MakeSucessResponseWithoutData<>();
+        return makeSucessResponseWithoutData.MakeSucessResp(new Status(String.valueOf(HttpStatus.OK),"sucess"),new Data<Null>(null));
 
     }
 
     @PostMapping("/logout")
-    public String LogOut(HttpServletRequest req){
+    @ResponseBody
+    public ResponseEntity<SucessResp<Null>> LogOut(HttpServletRequest req){
         HttpSession session=req.getSession(false);
-
+        String id=(String) session.getAttribute("id");
         if(session!=null){
             session.invalidate();
 
 
         }
-
-        return "redirect:/";
+        MakeSucessResponseWithoutData<Null> makeSucessResponseWithoutData=new MakeSucessResponseWithoutData<>();
+        return makeSucessResponseWithoutData.MakeSucessResp(new Status(String.valueOf(HttpStatus.OK),"sucess"),new Data<Null>(null));
     }
 
-    @GetMapping("/update")
-    public String GetUpdate(@ModelAttribute MemberDto memberDto){
 
-
-        return "update";
-    }
     @PostMapping("/update")
-    public String PostUpdate(@Valid @ModelAttribute MemberDto memberDto, BindingResult bindingResult, HttpServletRequest req){
+    public ResponseEntity<SucessResp<Null>> PostUpdate(@Valid @ModelAttribute MemberDto memberDto,BindingResult bindingResult,HttpServletRequest req) {
+
+
 
         if(bindingResult.hasErrors()){
-
-            return  "update";
+            throw new NotCollectFormError("입력형식 오류발생",HttpStatus.BAD_REQUEST,new BingdingErrorsList(bindingResult.getFieldErrors()));
         }
 
-        HttpSession session=req.getSession(false);
-        if(session==null){
+        HttpSession session = req.getSession(false);
 
-            return "redirect:/";
-        }
-        String id=(String)session.getAttribute("id");
+        String id = (String) session.getAttribute("id");
 
         memberService.UpdateData(id,memberDto);
-        log.info("업데이트 완료");
-        return "redirect:/";
+
+        MakeSucessResponseWithoutData<Null> makeSucessResponseWithoutData=new MakeSucessResponseWithoutData<>();
+        return makeSucessResponseWithoutData.MakeSucessResp(new Status(String.valueOf(HttpStatus.OK),"sucess"),new Data<Null>(null));
     }
 
 
-    @GetMapping("/mail")
-    public String GetMail(@ModelAttribute Emails emails,HttpServletRequest req){
-
-
-        return "members/mail";
-    }
 
     @PostMapping("/mail")
-    public String PostMail(@Valid @ModelAttribute Emails emails,BindingResult bindingResult,HttpServletRequest req){
+    public ResponseEntity<SucessResp<Null>> SendingMail (@Valid @ModelAttribute Emails emails,BindingResult bindingResult, HttpServletRequest req){
         if(bindingResult.hasErrors()){
-            return "members/mail";
+            throw new NotCollectFormError("입력형식 오류발생",HttpStatus.BAD_REQUEST,new BingdingErrorsList(bindingResult.getFieldErrors()));
         }
 
         Random r=new Random();
         char [] sendCode=new char[10];
         for(int i=0;i<10;i++){
 
+            int k=r.nextInt(41,88);
+            sendCode[i]=(char) k;
 
-            sendCode[i]=Character.forDigit(r.nextInt(100),10);;
         }
         String sendCodes=String.valueOf(sendCode);
         emailService.SendMail(emails.getEmail(),"인증요청",sendCodes);
@@ -134,47 +136,38 @@ public class LoginForm {
         HttpSession session=req.getSession(false);
         session.setAttribute("answer_code",sendCodes);
 
-        return "redirect:/mail2";
+        MakeSucessResponseWithoutData<Null> makeSucessResponseWithoutData=new MakeSucessResponseWithoutData<>();
+        return makeSucessResponseWithoutData.MakeSucessResp(new Status(String.valueOf(HttpStatus.OK),"sucess"),new Data<Null>(null));
     }
 
-    @GetMapping("/mail2")
-        public String GetCertification(@ModelAttribute CheckUserInput checkUserInput) {
 
-        return "members/mail2";
-    }
     @PostMapping("/mail2")
-    public String PostCertification(@ModelAttribute CheckUserInput checkUserInput, BindingResult bindingResult, HttpServletRequest req) {
+    public ResponseEntity<SucessResp<Null>> Certification(@ModelAttribute CheckUserInput checkUserInput, BindingResult bindingResult, HttpServletRequest req) {
         HttpSession session=req.getSession(false);
         String answer=(String)session.getAttribute("answer_code");
-        log.info("answr{} userenter{}",answer,checkUserInput.getUserinput());
+
         if(bindingResult.hasErrors()){
-
-
-            return "members/mail2";
+            throw new NotCollectFormError("입력형식 오류발생",HttpStatus.BAD_REQUEST,new BingdingErrorsList(bindingResult.getFieldErrors()));
         } else if (answer.equals(checkUserInput.getUserinput())) {
             session.setAttribute("check","true");
-            return "redirect:/passwords";
+            MakeSucessResponseWithoutData<Null> makeSucessResponseWithoutData=new MakeSucessResponseWithoutData<>();
+
+            return makeSucessResponseWithoutData.MakeSucessResp(new Status(String.valueOf(HttpStatus.OK.value()),"sucess"),new Data<Null>(null));
 
         }
-        return "members/mail2";
+        throw new MailCodeMisMatchError("입력코드 불일치",HttpStatus.OK,new CodeMisMatch(checkUserInput.getUserinput()));
 
 
     }
 
-    @GetMapping("/passwords")
-    public String GetUpdatePassword(@ModelAttribute PasswordDto passwordDto, HttpServletRequest req){
 
-        return "login/password";
-    }
 
 
     @PostMapping("/passwords")
-    public String PostUpdatePasssword(@Valid @ModelAttribute PasswordDto passwordDto, BindingResult bindingResult, HttpServletRequest req){
+    public ResponseEntity<SucessResp<Null>> ChangePassWord(@Valid @ModelAttribute PasswordDto passwordDto,BindingResult bindingResult, HttpServletRequest req){
 
         if(bindingResult.hasErrors()){
-
-
-            return "login/password";
+            throw new NotCollectFormError("입력형식 오류발생",HttpStatus.BAD_REQUEST,new BingdingErrorsList(bindingResult.getFieldErrors()));
         }
         HttpSession session=req.getSession(false);
         String id=(String) session.getAttribute("id");
@@ -182,7 +175,8 @@ public class LoginForm {
         session.setAttribute("answer",null);
         session.setAttribute("check",null);
 
-        return "redirect:/";
+        MakeSucessResponseWithoutData<Null> makeSucessResponseWithoutData=new MakeSucessResponseWithoutData<>();
+        return makeSucessResponseWithoutData.MakeSucessResp(new Status(String.valueOf(HttpStatus.OK.value()),"sucess"),new Data<Null>(null));
 
     }
 

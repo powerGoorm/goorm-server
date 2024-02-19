@@ -3,15 +3,25 @@ package com.powerGoorm.Web.Controller;
 
 import com.powerGoorm.Web.repositroy.JpaMemeberRepository;
 import com.powerGoorm.Web.service.LoginMemberService;
+import com.powerGoorm.domain.Data;
+import com.powerGoorm.domain.Exception.Errors.NotCollectFormerror.BingdingErrorsList;
+import com.powerGoorm.domain.Exception.Errors.NotCollectFormerror.NotCollectFormError;
+import com.powerGoorm.domain.Exception.Errors.idexisterror.NoId;
+import com.powerGoorm.domain.Exception.Errors.idexisterror.IdExistError;
+import com.powerGoorm.domain.Status;
+import com.powerGoorm.domain.Sucess.MakeSucessResponseWithoutData;
+import com.powerGoorm.domain.Sucess.SucessResp;
 import com.powerGoorm.member.Member;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Null;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.SQLException;
 import java.time.LocalDateTime;
 
 @Controller
@@ -24,34 +34,26 @@ public class MemberAssign {
     private final JpaMemeberRepository jpaMemeberRepository;
     private final LoginMemberService memberService;
 
-    @GetMapping("/add")
-    public String LoginGet(@ModelAttribute Member member){
 
-
-        return "members/addMemberForm";
-    }
-
-
+    @ResponseBody
     @PostMapping("/add")
-    public String LoginPost(@Valid @ModelAttribute Member member, BindingResult bindingResult)throws SQLException{
-
+    public ResponseEntity<SucessResp<Null>> LoginPost(@Valid @ModelAttribute Member member, BindingResult bindingResult){
+        //Member member=m.getBody();
         if(bindingResult.hasErrors()){
-            log.info("회원가입 정보중에 틀린것이있습니다.");
+            throw new NotCollectFormError("입력형식 오류발생",HttpStatus.BAD_REQUEST,new BingdingErrorsList(bindingResult.getFieldErrors()));
+        }
 
-            return "members/addMemberForm";
-        } else if (memberService.FindByUserId(member.getId())!=null) {
-            log.info("이미존재하는 아이디입니다.");
-            return  "members/addMemberForm";
+       if(memberService.FindByUserId(member.getId()).isPresent()) {
+
+            throw new IdExistError("이미 존재하는 아이디입니다.",HttpStatus.BAD_REQUEST,new NoId());
         }
         LocalDateTime now = LocalDateTime.now();
-
         member.setCreate_at(now.toString());
+        member.setDelete_at(null);
         memberService.SaveData(member);
-
-       return  "redirect:/";
+        MakeSucessResponseWithoutData<Null> makeSucessResponseWithoutData=new MakeSucessResponseWithoutData<>();
+        return makeSucessResponseWithoutData.MakeSucessResp(new Status(String.valueOf(HttpStatus.OK.value()),"sucess"),new Data<Null>(null));
     }
-
-
 
 
 

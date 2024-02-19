@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
+import java.util.function.Supplier;
 
 @RequiredArgsConstructor
 @Repository
@@ -30,12 +31,14 @@ public class JpaMemeberRepository implements com.powerGoorm.Web.repositroy.Repos
         member.setGit(memberDto.getGit());
         member.setIntroduction(memberDto.getIntroduction());
 
+
     }
 
     @Override
     public Optional<Member> findById(String id) {
 
         Member member=em.find(Member.class,id);
+        log.info("{} check",member);
 
 
         return Optional.ofNullable(member);

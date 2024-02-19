@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 public class Member {
 
 
+
     @Id
     @NotEmpty
     private String id;
@@ -29,11 +30,6 @@ public class Member {
     @Column(name="introduction")
     private String introduction;
 
-
-    @Column(name="created_at",nullable=false)
-    private String create_at;
-    @Column(name="deleted_at")
-    private String delete_at;
 
 
 

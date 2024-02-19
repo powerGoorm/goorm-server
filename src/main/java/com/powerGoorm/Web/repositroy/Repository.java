@@ -12,7 +12,7 @@ public interface Repository {
 
     Optional<Member> findById(String id);;
 
-    void update(String id, MemberDto memberDto);
+    void update (String id, MemberDto memberDto);
 
-    //void delete(Member member);
+
 }
