@@ -25,14 +25,14 @@ spring:
 
 
 
-#comment
+    #comment
 
     #datasource:
     #driver-class-name: com.mysql.cj.jdbc.Driver
     #url: jdbc:mysql://mydatabase.cfw2ecc8mwzk.ap-northeast-2.rds.amazonaws.com:3306/goorm
     #username: admin
     #password: password
-  #server:
+    #server:
     #port: 8080
     #servlet:
     #context-path: /
