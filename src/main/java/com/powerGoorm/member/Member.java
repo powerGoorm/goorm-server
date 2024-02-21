@@ -1,44 +1,47 @@
 package com.powerGoorm.member;
 
+import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 import lombok.Data;
-import lombok.RequiredArgsConstructor;
-@Data
+import lombok.Getter;
+import lombok.Setter;
+
 @Entity
+@Getter
+@Setter
 public class Member {
-
-
-
-    @Id
-    @NotEmpty
-    private String id;
-    @NotEmpty
-    @Column(name="name",nullable=false)
-    private String name;
-    @NotEmpty
-    @Column(name="password",nullable=false)
-    private String password;
-    @NotEmpty
-    @Column(name="git",nullable=false)
-    private String git;
-    @NotNull
-    @Column(name="created_at")
-    private String create_at;
-    @Column(name="deleted_at")
-    private String delete_at;
-    @Column(name="introduction")
-    private String introduction;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private String id;
+	@Column(name = "name", nullable = false)
+	private String name;
+	@Column(name = "password", nullable = false)
+	private String password;
+	@Column(name = "git", nullable = false)
+	private String git;
+	@Column(name = "introduction")
+	private String intro;
+	@Column(name = "created_at", nullable = false)
+	private LocalDateTime createdAt;
+	@Column(name = "deleted_at")
+	private LocalDateTime deletedAt;
 
 
 
 
 
 
+	public MemberDto toDto() {
+		return new MemberDto(
+			this.getId(),
+			this.getName(),
+			this.getGit(),
+			this.getIntro()
+		);
+	}
 }
-

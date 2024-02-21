@@ -7,8 +7,7 @@ import lombok.Data;
 @Data
 public class Emails {
 
-    @NotEmpty
-    @Email
+
     private String email;
 
 

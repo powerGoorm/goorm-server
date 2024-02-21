@@ -5,6 +5,6 @@ import lombok.Data;
 
 @Data
 public class CheckUserInput {
-    @NotNull
+
     private String userinput;
 }

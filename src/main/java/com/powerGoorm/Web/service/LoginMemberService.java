@@ -1,9 +1,9 @@
 package com.powerGoorm.Web.service;
 
 
-import com.powerGoorm.member.MemberDto;
 import com.powerGoorm.member.Member;
 import com.powerGoorm.Web.repositroy.JpaMemeberRepository;
+import com.powerGoorm.member.MemberDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -21,16 +21,16 @@ public class LoginMemberService {
 
 
     @Transactional
-    public Optional<Member> FindByUserId(String id){
+    public Optional<Member> FindByUserId(String username){
 
-            return jpaMemeberRepository.findById(id);
+            return jpaMemeberRepository.findById(username);
 
 
     }
     @Transactional
-    public boolean CheckPassword(String id,String password){
+    public boolean CheckPassword(String username,String password){
 
-     return jpaMemeberRepository.CheckPassword(id,password);
+     return jpaMemeberRepository.CheckPassword(username,password);
 
 
     }
@@ -40,17 +40,17 @@ public class LoginMemberService {
 
     }
     @Transactional
-    public void UpdateData(String id, MemberDto memberDto){
+    public void UpdateData(String username, MemberDto memberDto){
 
-        jpaMemeberRepository.update(id,memberDto);
+        jpaMemeberRepository.update(username,memberDto);
     }
 
 
 
     @Transactional
-    public void UpdatePassword(String id,String password){
+    public void UpdatePassword(String username,String password){
 
-        jpaMemeberRepository.UpdatePassword(id,password);
+        jpaMemeberRepository.UpdatePassword(username,password);
 
     }
 

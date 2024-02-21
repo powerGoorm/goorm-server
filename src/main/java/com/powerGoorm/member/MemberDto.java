@@ -1,19 +1,21 @@
 package com.powerGoorm.member;
 
-
-import jakarta.persistence.Column;
-import jakarta.persistence.Id;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data
 public class MemberDto {
+	private String id;
+	private String name;
+	private String git;
+	private String intro;
 
 
-    @NotEmpty
-    private String git;
-    @NotNull
-    private String introduction;
-
+	public MemberDto(){};
+	public MemberDto(String id, String name, String git, String intro) {
+		this.id = id;
+		this.name = name;
+		this.git = git;
+		this.intro = intro;
+	}
 }
+

@@ -39,7 +39,7 @@ public class ExceptionController {
 
         MakeErrorResps<NoId> makeErrorResps=new MakeErrorResps<>();
 
-        return makeErrorResps.MakeErrorResp(new Status(String.valueOf(e.getStatus()),e.getMessage()),
+        return makeErrorResps.MakeErrorResp(new Status(String.valueOf(e.getStatus().value()),e.getMessage()),
                 new Data<NoId>(e.getNoid()));
 
     }
@@ -49,7 +49,7 @@ public class ExceptionController {
 
         MakeErrorResps<NotPassword> makeErrorResps=new MakeErrorResps<>();
 
-        return makeErrorResps.MakeErrorResp(new Status(String.valueOf(e.getStatus()),e.getMessage()),
+        return makeErrorResps.MakeErrorResp(new Status(String.valueOf(e.getStatus().value()),e.getMessage()),
                 new Data<NotPassword>(e.getPassword()));
 
     }
@@ -59,7 +59,7 @@ public class ExceptionController {
 
         MakeErrorResps<Redirecturl> makeErrorResps=new MakeErrorResps<>();
 
-        return makeErrorResps.MakeErrorResp(new Status(String.valueOf(e.getStatus()),e.getMessage()),
+        return makeErrorResps.MakeErrorResp(new Status(String.valueOf(e.getStatus().value()),e.getMessage()),
                 new Data<Redirecturl>(e.getRedirecturl()));
     }
 
@@ -67,7 +67,7 @@ public class ExceptionController {
     public ResponseEntity<ErrorJson<BingdingErrorsList>> FormError(NotCollectFormError e){
 
         MakeErrorResps<BingdingErrorsList> makeErrorResps=new MakeErrorResps<>();
-        return makeErrorResps.MakeErrorResp(new Status(String.valueOf(e.getStatus()),e.getMessage()),
+        return makeErrorResps.MakeErrorResp(new Status(String.valueOf(e.getStatus().value()),e.getMessage()),
                 new Data<BingdingErrorsList>(e.getBingdingErrorsList()));
 
 
@@ -79,7 +79,7 @@ public class ExceptionController {
     public ResponseEntity<ErrorJson<CodeMisMatch>> MailCodeMismatch(MailCodeMisMatchError e){
 
         MakeErrorResps<CodeMisMatch> makeErrorResps=new MakeErrorResps<>();
-        return makeErrorResps.MakeErrorResp(new Status(String.valueOf(e.getStatus()),e.getMessage()),
+        return makeErrorResps.MakeErrorResp(new Status(String.valueOf(e.getStatus().value()),e.getMessage()),
                 new Data<CodeMisMatch>(e.getCodeMisMatch()));
 
     }
