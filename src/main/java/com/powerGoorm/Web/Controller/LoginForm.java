@@ -24,8 +24,7 @@ import com.powerGoorm.Web.repositroy.JpaMemeberRepository;
 import com.powerGoorm.Web.service.LoginMemberService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.Email;
+
 import jakarta.validation.constraints.Null;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -158,7 +157,7 @@ public class LoginForm {
 
 
     @PostMapping("/passwords")
-    public ResponseEntity<SucessResp<Null>> ChangePassWord(@ModelAttribute  PasswordDto passwordDto,HttpServletRequest req){
+    public ResponseEntity<SucessResp<Null>> ChangePassWord(@ModelAttribute  PasswordDto passwordDto, HttpServletRequest req){
 
 
         HttpSession session=req.getSession(false);
