@@ -31,11 +31,6 @@ public class Member {
 	@Column(name = "deleted_at")
 	private LocalDateTime deletedAt;
 
-
-
-
-
-
 	public MemberDto toDto() {
 		return new MemberDto(
 			this.getId(),
