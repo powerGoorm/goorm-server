@@ -55,4 +55,8 @@ public class Board {
         this.content = content;
         this.createdAt = createdAt;
     }
+
+    public boolean isDeleted() {
+        return deletedAt != null;
+    }
 }

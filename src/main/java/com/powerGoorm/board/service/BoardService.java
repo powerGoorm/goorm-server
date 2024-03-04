@@ -43,4 +43,13 @@ public class BoardService {
         return boardRepository.findAll(pageable)
                 .map(BoardListResponse::from);
     }
+
+    public BoardResponse find(Long id) {
+        Board board = boardRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("게시글을 찾을 수 없습니다."));
+        if (board.isDeleted()) {
+            throw new IllegalArgumentException("삭제된 게시글입니다.");
+        }
+        return BoardResponse.from(board);
+    }
 }
