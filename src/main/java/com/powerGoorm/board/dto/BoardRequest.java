@@ -1,6 +1,6 @@
 package com.powerGoorm.board.dto;
 
-public record BoardCreateRequest(
+public record BoardRequest(
         String title,
         String content
 ) {

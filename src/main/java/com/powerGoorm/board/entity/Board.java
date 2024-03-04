@@ -59,4 +59,10 @@ public class Board {
     public boolean isDeleted() {
         return deletedAt != null;
     }
+
+    public void update(String title, String content) {
+        this.title = title;
+        this.content = content;
+        updatedAt = LocalDateTime.now();
+    }
 }

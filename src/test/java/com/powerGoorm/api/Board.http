@@ -12,3 +12,12 @@ GET http://localhost:8080/board
 
 ###
 GET http://localhost:8080/board/1
+
+###
+PUT http://localhost:8080/board/1
+Content-Type: application/json
+
+{
+  "title": "title update",
+  "content": "content update"
+}
