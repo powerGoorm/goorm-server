@@ -4,14 +4,16 @@ import java.time.LocalDateTime;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.powerGoorm.board.dto.BoardRequest;
 import com.powerGoorm.board.dto.BoardListResponse;
+import com.powerGoorm.board.dto.BoardRequest;
 import com.powerGoorm.board.dto.BoardResponse;
 import com.powerGoorm.board.entity.Board;
 import com.powerGoorm.board.repository.BoardRepository;
+import com.powerGoorm.board.repository.BoardSpecification;
 import com.powerGoorm.member.Member;
 import com.powerGoorm.member.MemberRepository;
 
@@ -40,7 +42,7 @@ public class BoardService {
     }
 
     public Page<BoardListResponse> findALl(Pageable pageable) {
-        return boardRepository.findAll(pageable)
+        return boardRepository.findAll(Specification.where(BoardSpecification.notRemoved()), pageable)
                 .map(BoardListResponse::from);
     }
 
