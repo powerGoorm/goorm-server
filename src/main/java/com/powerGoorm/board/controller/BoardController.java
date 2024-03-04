@@ -4,6 +4,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -46,5 +47,11 @@ public class BoardController {
             @PathVariable("boardId") Long boardId,
             @SessionAttribute("id") String memberId) {
         return boardService.update(request, boardId, memberId);
+    }
+
+    @DeleteMapping("/board/{boardId}")
+    public void delete(@PathVariable("boardId") Long boardId,
+            @SessionAttribute("id") String memberId) {
+        boardService.delete(boardId, memberId);
     }
 }

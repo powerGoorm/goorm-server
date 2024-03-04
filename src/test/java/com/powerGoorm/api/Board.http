@@ -21,3 +21,6 @@ Content-Type: application/json
   "title": "title update",
   "content": "content update"
 }
+
+###
+DELETE http://localhost:8080/board/4

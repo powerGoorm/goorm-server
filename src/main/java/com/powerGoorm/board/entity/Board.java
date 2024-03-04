@@ -65,4 +65,8 @@ public class Board {
         this.content = content;
         updatedAt = LocalDateTime.now();
     }
+
+    public void delete() {
+        deletedAt = LocalDateTime.now();
+    }
 }
