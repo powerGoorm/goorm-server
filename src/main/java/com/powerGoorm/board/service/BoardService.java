@@ -2,10 +2,13 @@ package com.powerGoorm.board.service;
 
 import java.time.LocalDateTime;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.powerGoorm.board.dto.BoardCreateRequest;
+import com.powerGoorm.board.dto.BoardListResponse;
 import com.powerGoorm.board.dto.BoardResponse;
 import com.powerGoorm.board.entity.Board;
 import com.powerGoorm.board.repository.BoardRepository;
@@ -34,5 +37,10 @@ public class BoardService {
                 .createdAt(LocalDateTime.now())
                 .build();
         return BoardResponse.from(boardRepository.save(board));
+    }
+
+    public Page<BoardListResponse> findALl(Pageable pageable) {
+        return boardRepository.findAll(pageable)
+                .map(BoardListResponse::from);
     }
 }
