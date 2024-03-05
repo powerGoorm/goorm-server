@@ -1,0 +1,26 @@
+###
+POST http://localhost:8080/board
+Content-Type: application/json
+
+{
+  "title": "title1",
+  "content": "content1"
+}
+
+###
+GET http://localhost:8080/board
+
+###
+GET http://localhost:8080/board/1
+
+###
+PUT http://localhost:8080/board/1
+Content-Type: application/json
+
+{
+  "title": "title update",
+  "content": "content update"
+}
+
+###
+DELETE http://localhost:8080/board/4
