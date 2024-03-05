@@ -51,20 +51,20 @@ public class LoginForm {
 	@ResponseBody
 	public ResponseEntity<SucessResp<Null>> PostLoginPage(@ModelAttribute Login login, HttpServletRequest req) {
 
-		String username = login.getUsername();
+		String id = login.getId();
 
-		Optional<Member> member = memberService.FindByUserId(username);
+		Optional<Member> member = memberService.FindByUserId(id);
 
 		if (!member.isPresent()) {
 			log.info("{}", member.isPresent());
 			throw new NotFoundIdError("can't found id", HttpStatus.BAD_REQUEST, new NoId());
-		} else if (memberService.CheckPassword(username, login.getPassword())) {
+		} else if (memberService.CheckPassword(id, login.getPassword())) {
 
 			throw new UnCorrectPasswordError("un correct password", HttpStatus.BAD_REQUEST, new NotPassword());
 		}
 
 		HttpSession session = req.getSession();
-		session.setAttribute("id", username);
+		session.setAttribute("id", id);
 		MakeSucessResponseWithoutData<Null> makeSucessResponseWithoutData = new MakeSucessResponseWithoutData<>();
 		return makeSucessResponseWithoutData.MakeSucessResp(
 			new Status(String.valueOf(HttpStatus.OK.value()), "login sucess"), new Data<Null>(null));
@@ -90,9 +90,10 @@ public class LoginForm {
 
 		HttpSession session = req.getSession(false);
 
-		String username = (String)session.getAttribute("id");
+		String id = (String)session.getAttribute("id");
 
-		memberService.UpdateData(username, memberDto);
+		memberDto.setId(id);
+		memberService.UpdateData(id, memberDto);
 
 		MakeSucessResponseWithoutData<Null> makeSucessResponseWithoutData = new MakeSucessResponseWithoutData<>();
 		return makeSucessResponseWithoutData.MakeSucessResp(
@@ -100,7 +101,7 @@ public class LoginForm {
 	}
 
 	@PostMapping("/mail")
-	public ResponseEntity<SucessResp<Null>> SendingMail(@ModelAttribute Emails emails, HttpServletRequest req) {
+	public ResponseEntity<SucessResp<Null>> SendingMail(HttpServletRequest req) {
 
 		Random r = new Random();
 		char[] sendCode = new char[10];
@@ -110,10 +111,12 @@ public class LoginForm {
 			sendCode[i] = (char)k;
 
 		}
-		String sendCodes = String.valueOf(sendCode);
-		emailService.SendMail(emails.getEmail(), "인증요청", sendCodes);
-
 		HttpSession session = req.getSession(false);
+
+		String sendCodes = String.valueOf(sendCode);
+		emailService.SendMail((String) session.getAttribute("id"), "인증요청", sendCodes);
+
+
 		session.setAttribute("answer_code", sendCodes);
 
 		MakeSucessResponseWithoutData<Null> makeSucessResponseWithoutData = new MakeSucessResponseWithoutData<>();
