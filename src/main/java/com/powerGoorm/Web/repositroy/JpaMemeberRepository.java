@@ -21,32 +21,32 @@ public class JpaMemeberRepository implements com.powerGoorm.Web.repositroy.Repos
 	private final EntityManager em;
 
 	@Override
-	public void save(Member m) {
-		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-		String password = encoder.encode(m.getPassword());
-		m.setPassword(password);
+		public void save(Member m) {
+			BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+			String password = encoder.encode(m.getPassword());
+			m.setPassword(password);
 
 		em.persist(m);
 
 	}
 
 	@Override
-	public void update(String username, MemberDto memberDto) {
-		String query = "update Member m set m.git =:git,m.intro=:intro  where m.name=:username";
+	public void update(String id, MemberDto memberDto) {
+		String query = "update Member m set m.git =:git,m.intro=:intro  where m.id=:id";
 		em.createQuery(query)
 			.setParameter("git", memberDto.getGit())
 			.setParameter("intro", memberDto.getIntro())
-			.setParameter("username", username)
+			.setParameter("id", id)
 			.executeUpdate();
 
 	}
 
 	@Override
-	public Optional<Member> findById(String username) {
+	public Optional<Member> findById(String id) {
 		try {
-			String query = "select m from Member m where m.name=:username";
+			String query = "select m from Member m where m.id=:id";
 			Member m = em.createQuery(query, Member.class)
-				.setParameter("username", username)
+				.setParameter("id", id)
 				.getSingleResult();
 			return Optional.ofNullable(m);
 		} catch (NoResultException e) {
@@ -56,11 +56,11 @@ public class JpaMemeberRepository implements com.powerGoorm.Web.repositroy.Repos
 
 	}
 
-	public boolean CheckPassword(String username, String password) {
+	public boolean CheckPassword(String id, String password) {
 		try {
-			String query = "select m from Member m where m.name=:username";
+			String query = "select m from Member m where m.id=:id";
 			Member member = em.createQuery(query, Member.class)
-				.setParameter("username", username)
+				.setParameter("id",id)
 				.getSingleResult();
 
 			BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
@@ -72,13 +72,13 @@ public class JpaMemeberRepository implements com.powerGoorm.Web.repositroy.Repos
 
 	}
 
-	public void UpdatePassword(String username, String password) {
-		String query = "update Member m set m.password=:password where m.name=:username";
+	public void UpdatePassword(String id, String password) {
+		String query = "update Member m set m.password=:password where m.id=:id";
 		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 		String hashedpassword = encoder.encode(password);
 		em.createQuery(query)
 			.setParameter("password", hashedpassword)
-			.setParameter("username", username)
+			.setParameter("id", id)
 			.executeUpdate();
 
 	}

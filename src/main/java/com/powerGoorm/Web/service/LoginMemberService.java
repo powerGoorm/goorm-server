@@ -21,16 +21,16 @@ public class LoginMemberService {
 
 
     @Transactional
-    public Optional<Member> FindByUserId(String username){
+    public Optional<Member> FindByUserId(String id){
 
-            return jpaMemeberRepository.findById(username);
+            return jpaMemeberRepository.findById(id);
 
 
     }
     @Transactional
-    public boolean CheckPassword(String username,String password){
+    public boolean CheckPassword(String id,String password){
 
-     return jpaMemeberRepository.CheckPassword(username,password);
+     return jpaMemeberRepository.CheckPassword(id,password);
 
 
     }
@@ -40,17 +40,17 @@ public class LoginMemberService {
 
     }
     @Transactional
-    public void UpdateData(String username, MemberDto memberDto){
+    public void UpdateData(String id, MemberDto memberDto){
 
-        jpaMemeberRepository.update(username,memberDto);
+        jpaMemeberRepository.update(id,memberDto);
     }
 
 
 
     @Transactional
-    public void UpdatePassword(String username,String password){
+    public void UpdatePassword(String id,String password){
 
-        jpaMemeberRepository.UpdatePassword(username,password);
+        jpaMemeberRepository.UpdatePassword(id,password);
 
     }
 
