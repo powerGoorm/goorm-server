@@ -57,17 +57,17 @@ public class LoginForm {
 
 		if (!member.isPresent()) {
 			log.info("{}", member.isPresent());
-			throw new NotFoundIdError("can't found id", HttpStatus.BAD_REQUEST, new NoId());
+			throw new NotFoundIdError("존재하지 않는 아이디입니다.", HttpStatus.BAD_REQUEST, new NoId());
 		} else if (memberService.CheckPassword(id, login.getPassword())) {
 
-			throw new UnCorrectPasswordError("un correct password", HttpStatus.BAD_REQUEST, new NotPassword());
+			throw new UnCorrectPasswordError("비밀번호가 일치하지않습니다.", HttpStatus.BAD_REQUEST, new NotPassword());
 		}
 
 		HttpSession session = req.getSession();
 		session.setAttribute("id", id);
 		MakeSucessResponseWithoutData<Null> makeSucessResponseWithoutData = new MakeSucessResponseWithoutData<>();
 		return makeSucessResponseWithoutData.MakeSucessResp(
-			new Status(String.valueOf(HttpStatus.OK.value()), "login sucess"), new Data<Null>(null));
+			new Status(String.valueOf(HttpStatus.OK.value()), "로그인 성공"), new Data<Null>(null));
 
 	}
 
@@ -82,7 +82,7 @@ public class LoginForm {
 		}
 		MakeSucessResponseWithoutData<Null> makeSucessResponseWithoutData = new MakeSucessResponseWithoutData<>();
 		return makeSucessResponseWithoutData.MakeSucessResp(
-			new Status(String.valueOf(HttpStatus.OK.value()), " logoout sucess"), new Data<Null>(null));
+			new Status(String.valueOf(HttpStatus.OK.value()), "로그 아웃 성공"), new Data<Null>(null));
 	}
 
 	@PostMapping("/update")
@@ -97,7 +97,7 @@ public class LoginForm {
 
 		MakeSucessResponseWithoutData<Null> makeSucessResponseWithoutData = new MakeSucessResponseWithoutData<>();
 		return makeSucessResponseWithoutData.MakeSucessResp(
-			new Status(String.valueOf(HttpStatus.OK.value()), "update sucess"), new Data<Null>(null));
+			new Status(String.valueOf(HttpStatus.OK.value()), "업데이트 성공"), new Data<Null>(null));
 	}
 
 	@PostMapping("/mail")
@@ -121,7 +121,7 @@ public class LoginForm {
 
 		MakeSucessResponseWithoutData<Null> makeSucessResponseWithoutData = new MakeSucessResponseWithoutData<>();
 		return makeSucessResponseWithoutData.MakeSucessResp(
-			new Status(String.valueOf(HttpStatus.OK.value()), "sending mail sucess"), new Data<Null>(null));
+			new Status(String.valueOf(HttpStatus.OK.value()), "인증 메일 전송성공"), new Data<Null>(null));
 	}
 
 	@PostMapping("/mail2")
@@ -135,7 +135,7 @@ public class LoginForm {
 			MakeSucessResponseWithoutData<Null> makeSucessResponseWithoutData = new MakeSucessResponseWithoutData<>();
 
 			return makeSucessResponseWithoutData.MakeSucessResp(
-				new Status(String.valueOf(HttpStatus.OK.value()), "mail check sucess"), new Data<Null>(null));
+				new Status(String.valueOf(HttpStatus.OK.value()), "메일 인증 성공"), new Data<Null>(null));
 
 		}
 		throw new MailCodeMisMatchError("입력코드 불일치", HttpStatus.OK, new CodeMisMatch(checkUserInput.getUserInput()));
@@ -154,7 +154,7 @@ public class LoginForm {
 
 		MakeSucessResponseWithoutData<Null> makeSucessResponseWithoutData = new MakeSucessResponseWithoutData<>();
 		return makeSucessResponseWithoutData.MakeSucessResp(
-			new Status(String.valueOf(HttpStatus.OK.value()), "change password sucess"), new Data<Null>(null));
+			new Status(String.valueOf(HttpStatus.OK.value()), "비밀번호 변경 성공"), new Data<Null>(null));
 
 	}
 

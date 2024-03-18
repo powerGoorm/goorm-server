@@ -35,7 +35,14 @@ public class MemberAssign {
     @ResponseBody
     @PostMapping("/add")
     public ResponseEntity<SucessResp<Null>> LoginPost(@ModelAttribute Member m){
+        if(m.getId()==null){
+            throw new IdExistError("이름을 입력해주세요",HttpStatus.BAD_REQUEST,new NoId());
 
+        }
+        if(m.getName()==null || m.getPassword()==null){
+            throw new IdExistError("이름혹은 비밀번호를 입력해주세요",HttpStatus.BAD_REQUEST,new NoId());
+
+        }
         Optional<Member> member=memberService.FindByUserId(m.getId());
         if(member.isPresent()){
             throw new IdExistError("이미 존재하는 아이디입니다.",HttpStatus.BAD_REQUEST,new NoId());
