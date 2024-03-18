@@ -36,9 +36,9 @@ public class MemberAssign {
     @PostMapping("/add")
     public ResponseEntity<SucessResp<Null>> LoginPost(@ModelAttribute Member m){
 
-        Optional<Member> member=memberService.FindByUserId(m.getName());
+        Optional<Member> member=memberService.FindByUserId(m.getId());
         if(member.isPresent()){
-            throw new IdExistError("이미 존재하는 아이디",HttpStatus.BAD_REQUEST,new NoId());
+            throw new IdExistError("이미 존재하는 아이디입니다.",HttpStatus.BAD_REQUEST,new NoId());
         }
 
 
