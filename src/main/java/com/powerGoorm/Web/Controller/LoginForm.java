@@ -3,9 +3,11 @@ package com.powerGoorm.Web.Controller;
 import java.util.Optional;
 import java.util.Random;
 
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -49,7 +51,14 @@ public class LoginForm {
 
 	@PostMapping("/login")
 	@ResponseBody
-	public ResponseEntity<SucessResp<Null>> PostLoginPage(@ModelAttribute Login login, HttpServletRequest req) {
+	public ResponseEntity<SucessResp<Null>> PostLoginPage(@Valid @ModelAttribute Login login, BindingResult b,HttpServletRequest req) {
+
+		if(b.hasErrors()){
+
+			throw new UnCorrectPasswordError(b.getFieldError().getDefaultMessage(), HttpStatus.BAD_REQUEST, new NotPassword());
+		}
+
+
 
 		String id = login.getId();
 
@@ -86,7 +95,13 @@ public class LoginForm {
 	}
 
 	@PostMapping("/update")
-	public ResponseEntity<SucessResp<Null>> PostUpdate(@ModelAttribute MemberDto memberDto, HttpServletRequest req) {
+	public ResponseEntity<SucessResp<Null>> PostUpdate(@Valid @ModelAttribute MemberDto memberDto,BindingResult b,HttpServletRequest req) {
+
+
+		if(b.hasErrors()){
+			throw new UnCorrectPasswordError(b.getFieldError().getDefaultMessage(), HttpStatus.BAD_REQUEST, new NotPassword());
+		}
+
 
 		HttpSession session = req.getSession(false);
 
@@ -125,8 +140,11 @@ public class LoginForm {
 	}
 
 	@PostMapping("/mail2")
-	public ResponseEntity<SucessResp<Null>> Certification(@ModelAttribute CheckUserInput checkUserInput,
+	public ResponseEntity<SucessResp<Null>> Certification(@Valid @ModelAttribute CheckUserInput checkUserInput,BindingResult b,
 		HttpServletRequest req) {
+		if(b.hasErrors()){
+			throw new UnCorrectPasswordError(b.getFieldError().getDefaultMessage(), HttpStatus.BAD_REQUEST, new NotPassword());
+		}
 		HttpSession session = req.getSession(false);
 		String answer = (String)session.getAttribute("answer_code");
 
@@ -143,9 +161,11 @@ public class LoginForm {
 	}
 
 	@PostMapping("/passwords")
-	public ResponseEntity<SucessResp<Null>> ChangePassWord(@ModelAttribute PasswordDto passwordDto,
+	public ResponseEntity<SucessResp<Null>> ChangePassWord(@Valid @ModelAttribute PasswordDto passwordDto,BindingResult b,
 		HttpServletRequest req) {
-
+		if(b.hasErrors()){
+			throw new UnCorrectPasswordError(b.getFieldError().getDefaultMessage(), HttpStatus.BAD_REQUEST, new NotPassword());
+		}
 		HttpSession session = req.getSession(false);
 		String id = (String)session.getAttribute("id");
 		memberService.UpdatePassword(id, passwordDto.getPassword());
