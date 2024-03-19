@@ -4,21 +4,26 @@ package com.powerGoorm.Web.Controller;
 import com.powerGoorm.Web.repositroy.JpaMemeberRepository;
 import com.powerGoorm.Web.service.LoginMemberService;
 import com.powerGoorm.domain.Data;
+import com.powerGoorm.domain.Exception.Errors.NotCollectFormerror.BingdingErrorsList;
 import com.powerGoorm.domain.Exception.Errors.idexisterror.IdExistError;
 import com.powerGoorm.domain.Exception.Errors.idexisterror.NoId;
 import com.powerGoorm.domain.Status;
 import com.powerGoorm.domain.Sucess.MakeSucessResponseWithoutData;
 import com.powerGoorm.domain.Sucess.SucessResp;
 import com.powerGoorm.member.Member;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Null;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -34,13 +39,11 @@ public class MemberAssign {
 
     @ResponseBody
     @PostMapping("/add")
-    public ResponseEntity<SucessResp<Null>> LoginPost(@ModelAttribute Member m){
-        if(m.getId()==null){
-            throw new IdExistError("이름을 입력해주세요",HttpStatus.BAD_REQUEST,new NoId());
-
-        }
-        if(m.getName()==null || m.getPassword()==null){
-            throw new IdExistError("이름혹은 비밀번호를 입력해주세요",HttpStatus.BAD_REQUEST,new NoId());
+    public ResponseEntity<SucessResp<Null>> LoginPost(@Valid  @ModelAttribute Member m, BindingResult bindingResult){
+        if (bindingResult.hasErrors()){
+            FieldError b=bindingResult.getFieldError();
+            log.info("fielderror:{}",b.getDefaultMessage());
+            throw new IdExistError(b.getDefaultMessage(),HttpStatus.BAD_REQUEST,new NoId());
 
         }
         Optional<Member> member=memberService.FindByUserId(m.getId());

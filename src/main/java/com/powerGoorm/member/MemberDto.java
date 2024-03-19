@@ -1,9 +1,11 @@
 package com.powerGoorm.member;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data
 public class MemberDto {
+	@NotNull(message = "아이디을 입력해주세요")
 	private String id;
 	private String name;
 	private String git;
