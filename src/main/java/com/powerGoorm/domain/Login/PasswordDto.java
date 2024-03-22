@@ -10,6 +10,6 @@ import lombok.Data;
 public class PasswordDto {
 
 
-    @NotEmpty
+    @NotEmpty(message = "업데이트할 비밀번호를 넣어주세요")
     private String password;
 }
