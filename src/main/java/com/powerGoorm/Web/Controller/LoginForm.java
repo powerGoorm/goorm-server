@@ -115,7 +115,7 @@ public class LoginForm {
 			new Status(String.valueOf(HttpStatus.OK.value()), "업데이트 성공"), new Data<Null>(null));
 	}
 
-	@PostMapping("/mail")
+	@PostMapping("/sendmail")
 	public ResponseEntity<SucessResp<Null>> SendingMail(HttpServletRequest req) {
 
 		Random r = new Random();
@@ -139,7 +139,7 @@ public class LoginForm {
 			new Status(String.valueOf(HttpStatus.OK.value()), "인증 메일 전송성공"), new Data<Null>(null));
 	}
 
-	@PostMapping("/mail2")
+	@PostMapping("/checkmailcode")
 	public ResponseEntity<SucessResp<Null>> Certification(@Valid @ModelAttribute CheckUserInput checkUserInput,BindingResult b,
 		HttpServletRequest req) {
 		if(b.hasErrors()){
@@ -160,7 +160,7 @@ public class LoginForm {
 
 	}
 
-	@PostMapping("/passwords")
+	@PostMapping("/changepassword")
 	public ResponseEntity<SucessResp<Null>> ChangePassWord(@Valid @ModelAttribute PasswordDto passwordDto,BindingResult b,
 		HttpServletRequest req) {
 		if(b.hasErrors()){
