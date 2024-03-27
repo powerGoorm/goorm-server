@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.powerGoorm.Web.repositroy.JpaMemeberRepository;
@@ -51,7 +52,7 @@ public class LoginForm {
 
 	@PostMapping("/login")
 	@ResponseBody
-	public ResponseEntity<SucessResp<Null>> PostLoginPage(@Valid @ModelAttribute Login login, BindingResult b,HttpServletRequest req) {
+	public ResponseEntity<SucessResp<Null>> PostLoginPage(@Valid @RequestBody Login login, BindingResult b, HttpServletRequest req) {
 
 		if(b.hasErrors()){
 
@@ -95,7 +96,7 @@ public class LoginForm {
 	}
 
 	@PostMapping("/update")
-	public ResponseEntity<SucessResp<Null>> PostUpdate(@Valid @ModelAttribute MemberDto memberDto,BindingResult b,HttpServletRequest req) {
+	public ResponseEntity<SucessResp<Null>> PostUpdate(@Valid @RequestBody MemberDto memberDto,BindingResult b,HttpServletRequest req) {
 
 
 		if(b.hasErrors()){
@@ -140,7 +141,7 @@ public class LoginForm {
 	}
 
 	@PostMapping("/checkmailcode")
-	public ResponseEntity<SucessResp<Null>> Certification(@Valid @ModelAttribute CheckUserInput checkUserInput,BindingResult b,
+	public ResponseEntity<SucessResp<Null>> Certification(@Valid @RequestBody CheckUserInput checkUserInput,BindingResult b,
 		HttpServletRequest req) {
 		if(b.hasErrors()){
 			throw new UnCorrectPasswordError(b.getFieldError().getDefaultMessage(), HttpStatus.BAD_REQUEST, new NotPassword());
@@ -161,7 +162,7 @@ public class LoginForm {
 	}
 
 	@PostMapping("/changepassword")
-	public ResponseEntity<SucessResp<Null>> ChangePassWord(@Valid @ModelAttribute PasswordDto passwordDto,BindingResult b,
+	public ResponseEntity<SucessResp<Null>> ChangePassWord(@Valid @RequestBody PasswordDto passwordDto,BindingResult b,
 		HttpServletRequest req) {
 		if(b.hasErrors()){
 			throw new UnCorrectPasswordError(b.getFieldError().getDefaultMessage(), HttpStatus.BAD_REQUEST, new NotPassword());
